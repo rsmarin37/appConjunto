@@ -24,7 +24,7 @@ public class ConsultasDB extends Conexion{
         PreparedStatement ps;
         Connection con = getConnection();
         
-        String sql = "insert into propietario (?,?,?,?,?)";
+        String sql = "insert into propietario (idpropietarioCC, nombre, apellido, telefono, celular) values (?,?,?,?,?)";
         try {
             ps = con.prepareStatement(sql);
             ps.setInt(1, p.getIdpropietarioCC());
@@ -245,10 +245,11 @@ public class ConsultasDB extends Conexion{
         PreparedStatement ps;
         Connection con = getConnection();
         
-        String sql = "insert into casa (numero) values (?)";
+        String sql = "insert into casa (numero, propietario_ID) values (?,?)";
         try {
             ps = con.prepareStatement(sql);
-            ps.setString(1, c.getNumero());       
+            ps.setString(1, c.getNumero()); 
+            ps.setInt(2, c.getPropietario_id()); 
             ps.execute();
             return true;
         } catch (SQLException e) {
@@ -317,7 +318,7 @@ public class ConsultasDB extends Conexion{
         Connection con = getConnection();
         ResultSet rs;
         
-        String sql = "select idcasa, numero, propietario_ID from casa where idcasa = ?";
+        String sql = "select idcasa, numero, propietario_ID from casa where numero = ?";
         
         try {
             ps = con.prepareStatement(sql);
@@ -327,7 +328,7 @@ public class ConsultasDB extends Conexion{
             if(rs.next()){
                 c.setIdcasa(rs.getInt("idcasa"));
                 c.setNumero((rs.getString("numero")));
-                c.setPropietario_id((rs.getString("propietario_ID")));
+                c.setPropietario_id((rs.getInt("propietario_ID")));
                 return true;
             }
             return false;

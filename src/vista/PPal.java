@@ -21,7 +21,7 @@ public class PPal extends javax.swing.JFrame {
         initComponents();
         this.setLocationRelativeTo(null  );
     }
-    public boolean nuevoPropietario;
+    public static boolean nuevoPropietario;
     public Propietario p = new Propietario();
 
     /**

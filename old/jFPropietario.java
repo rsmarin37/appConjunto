@@ -11,8 +11,6 @@ import java.util.ArrayList;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import modelo.Casa;
-import modelo.Mascota;
-import modelo.Propietario;
 
 /**
  *
@@ -24,7 +22,7 @@ public class jFPropietario extends javax.swing.JFrame {
      * Creates new form Propietario
      */
     DefaultListModel modeloListaCasa, modeloListaMascota;
-    public static int fkMascota=0;     
+            
     public jFPropietario() {
         initComponents();
         this.setLocationRelativeTo(null);
@@ -32,12 +30,10 @@ public class jFPropietario extends javax.swing.JFrame {
         modeloListaMascota = new DefaultListModel();
         listaCasas.setModel(modeloListaCasa);
         listaMascotas.setModel(modeloListaMascota);
-        
+        actualizarListCasa();
     }
     PPal frmPpal = new PPal();
     Casa c = new Casa();
-    Propietario p = new Propietario();
-    Mascota m = new Mascota();
     ConsultasDB db = new ConsultasDB();
     /**
      * This method is called from within the constructor to initialize the form.
@@ -71,7 +67,6 @@ public class jFPropietario extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         listaCasas = new javax.swing.JList<>();
         btnNuevaCasa = new javax.swing.JButton();
-        btnQuitarCasa = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -139,7 +134,6 @@ public class jFPropietario extends javax.swing.JFrame {
         });
 
         btnEliminar.setText("Eliminar");
-        btnEliminar.setEnabled(false);
         btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnEliminarActionPerformed(evt);
@@ -151,25 +145,12 @@ public class jFPropietario extends javax.swing.JFrame {
             public int getSize() { return strings.length; }
             public String getElementAt(int i) { return strings[i]; }
         });
-        listaCasas.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                listaCasasValueChanged(evt);
-            }
-        });
         jScrollPane1.setViewportView(listaCasas);
 
         btnNuevaCasa.setText("Nueva Casa");
         btnNuevaCasa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnNuevaCasaActionPerformed(evt);
-            }
-        });
-
-        btnQuitarCasa.setText("Quitar");
-        btnQuitarCasa.setEnabled(false);
-        btnQuitarCasa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnQuitarCasaActionPerformed(evt);
             }
         });
 
@@ -181,9 +162,7 @@ public class jFPropietario extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(btnNuevaCasa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(btnQuitarCasa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(btnNuevaCasa)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -194,8 +173,6 @@ public class jFPropietario extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(btnNuevaCasa)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnQuitarCasa)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -276,25 +253,15 @@ public class jFPropietario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void actualizarListCasa(){
-       /* ArrayList<Casa> c = db.listarCasa("");
+        ArrayList<Casa> c = db.listarCasa("");
         
         for (int i = 0; i < c.size(); i++) {
             modeloListaCasa.addElement(c.get(i).getNumero());
             System.out.println(i+"__>"+c.get(i).getNumero());
-        }*/
+        }
     }
-    
     private void actualizarListMascota(){
         
-    }
-    private void limpiar(){
-        txtDocumentoP.setText("");
-        txtApellidoP.setText("");
-        txtNombreP.setText("");
-        txtTelefonoP.setText("");
-        txtCelularP.setText("");
-        modeloListaCasa.clear();
-        modeloListaMascota.clear();
     }
     private void btnAtrasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtrasActionPerformed
         frmPpal.setVisible(true);
@@ -302,7 +269,6 @@ public class jFPropietario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnAtrasActionPerformed
 
     private void btnNuevaMascotaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaMascotaActionPerformed
-        fkMascota = Integer.parseInt(txtDocumentoP.getText());
         jFMascota jfMascota = new jFMascota();
         jfMascota.setVisible(true);
         this.setVisible(false);
@@ -313,62 +279,23 @@ public class jFPropietario extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        
         if(frmPpal.nuevoPropietario){
-            p.setIdpropietarioCC(Integer.parseInt(txtDocumentoP.getText()));
-            p.setNombre(txtNombreP.getText());
-            p.setApellido(txtApellidoP.getText());
-            p.setTelefono(txtTelefonoP.getText());
-            p.setCelular(txtCelularP.getText());
-            if(db.RegistrarPropietario(p)){
-                if(modeloListaCasa.getSize()>0){
-                    for (int i = 0; i < modeloListaCasa.getSize(); i++) {
-                        c.setNumero((String) modeloListaCasa.getElementAt(i));
-                        c.setPropietario_id(Integer.parseInt(txtDocumentoP.getText()));
-                        db.RegistrarCasa(c);
-                    }
-                }
-                if(modeloListaMascota.getSize()>0){
-                    
-                }
-                JOptionPane.showMessageDialog(null, "Propietario Ingresado correctamente");
-                
-            }
-            limpiar();
+            //nuevo propietario
         }else{
             //modificar propietario
         }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnNuevaCasaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevaCasaActionPerformed
-        System.out.println(frmPpal.nuevoPropietario);
-        if(frmPpal.nuevoPropietario){
-            String valor = JOptionPane.showInputDialog("Numero de casa:");
-            c.setNumero(valor);
-            if(db.buscarCasa(c)){
-                //ya existe
-                JOptionPane.showMessageDialog(null, "Esta casa ya se encuentra registrada");
-            }else{
-                modeloListaCasa.addElement(valor);
-            }
-        }else{
-            //modificar propietario
+        c.setNumero(JOptionPane.showInputDialog("Numero de casa:"));
+        if(c.getNumero() != null){
+            db.RegistrarCasa(c);
         }
- 
+        
+        System.out.println(c.getNumero());
+        System.out.println(c.getIdcasa());
         actualizarListCasa();
     }//GEN-LAST:event_btnNuevaCasaActionPerformed
-
-    private void btnQuitarCasaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarCasaActionPerformed
-        int respuesta = JOptionPane.showConfirmDialog(null, "Realmente desea eliminar");
-        if(respuesta==0){
-        int pos = listaCasas.getSelectedIndex();
-        modeloListaCasa.remove(pos);
-        }
-    }//GEN-LAST:event_btnQuitarCasaActionPerformed
-
-    private void listaCasasValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listaCasasValueChanged
-        btnQuitarCasa.setEnabled(true);
-    }//GEN-LAST:event_listaCasasValueChanged
 
     /**
      * @param args the command line arguments
@@ -412,7 +339,6 @@ public class jFPropietario extends javax.swing.JFrame {
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnNuevaCasa;
     private javax.swing.JButton btnNuevaMascota;
-    private javax.swing.JButton btnQuitarCasa;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
